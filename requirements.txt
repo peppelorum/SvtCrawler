@@ -1,0 +1,4 @@
+SQLAlchemy>=0.7
+pyquery
+requests
+

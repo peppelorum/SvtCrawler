@@ -15,11 +15,12 @@ Flöde
 Data
 ---------
 - Alla träffar sparas i en enkel SQLAlchmey-db (sqlite) och ser typ ut som (i djangomodelsyntax då):
-    STATES = ((1, 'Träff'), (2, 'Ladda ned'), (3, 'Ladda ej ned')) # Yada, yada
-    class Hit():
-        url = models.TextField()
-        created = models.DateTimeField()
-        state = models.IntegerField(choices=STATES)
+
+        STATES = ((1, 'Träff'), (2, 'Ladda ned'), (3, 'Ladda ej ned')) # Yada, yada
+        class Hit():
+            url = models.TextField()
+            created = models.DateTimeField()
+            state = models.IntegerField(choices=STATES)
 
 
 Frågor

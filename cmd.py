@@ -1,28 +1,28 @@
 __author__ = 'peppe'
 
+import os
 from optparse import OptionParser
 
 from svtcrawler import SvtCrawler
 
 
 def main():
-    parser = OptionParser(usage="usage: %prog [options] url")
-#    parser.add_option("-u", "--url",
-#                      action="store", # optional because action defaults to "store"
-#                      dest="url",
-#                      default=False,
-#                      help="URL to start with",)
+    parser = OptionParser(usage="usage: %prog [options]")
     parser.add_option("-f", "--filename",
                       action="store", # optional because action defaults to "store"
                       dest="filename",
                       help="Filename for hit list",)
     (options, args) = parser.parse_args()
 
-    if len(args) != 1:
+    if len(args) != 0:
         parser.error("wrong number of arguments")
 
-    obj = SvtCrawler(options.filename)
-    obj.crawl(args[0])
+
+    path = os.path.dirname(os.path.realpath(__file__))
+    filepath = os.path.join(os.path.dirname(os.path.realpath(__file__)), options.filename)
+
+    obj = SvtCrawler(filepath)
+    obj.crawl()
 
 if __name__ == '__main__':
     main()

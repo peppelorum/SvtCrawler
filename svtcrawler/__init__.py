@@ -110,6 +110,7 @@ class Episodes:
         # Index all episodes
         link = self.episodes_iter[self.i]
 
+        # Parse the current episode from the long list of episodes
         article = PyQuery(link)
         episode = article.find('a.playLink')
         full_url = self.crawler.baseurl + article.find('a.playLink').attr('href')
@@ -131,6 +132,7 @@ class Episodes:
 
             if not episode.attr('href').startswith('http'):
                 try:
+                    # Get the episode from url
                     article_full = PyQuery(url)
                     thumbnail = article_full.find('img.svtHide-No-Js').eq(0).attr('data-imagename')
                     meta = article_full.find('.playVideoMetaInfo div')
@@ -152,8 +154,7 @@ class Episodes:
                     else:
                         on_device = 2
 
-                    soupEpisode = PyQuery(url)
-                    episodeTitle = soupEpisode.find('title').eq(0).text().replace('| SVT Play', '')
+                    episodeTitle = article_full.find('title').eq(0).text().replace('| SVT Play', '')
                     episode.title = episodeTitle
                     episode.title_slug = shellquote(episodeTitle)
                     episode.http_status = 200
@@ -173,7 +174,6 @@ class Episodes:
                 except HTTPError as err:
                     self.i += 1
                     return self.next()
-
 
 
 class Shows:

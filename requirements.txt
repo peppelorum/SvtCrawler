@@ -1,4 +1,3 @@
-SQLAlchemy>=0.7
-#pyquery
+pyquery
 requests
-BeautifulSoup4
+python-dateutil

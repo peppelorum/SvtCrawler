@@ -11,9 +11,32 @@
 from datetime import datetime, timedelta
 from urllib2 import HTTPError
 from pytz import timezone, utc
+from dateutil.parser import parse, parserinfo
 from pyquery import PyQuery
 
 TIME_ZONE = 'Europe/Stockholm'
+
+
+class sverje(parserinfo):
+    WEEKDAYS = [(u"Mån", u"Måndag"),
+                ("Ti", "Tis", "Tisdag"),
+                ("On", "Ons", "Onsdag"),
+                ("To", "Tor", "Torsdag"),
+                ("Fr", "Fre", "Fredag"),
+                (u"Lör", u"Lördag"),
+                (u"Sön", u"Söndag")]
+    MONTHS   = [("Jan", "Januari"),
+                ("Feb", "Februari"),
+                ("Mar", "Mars"),
+                ("Apr", "April"),
+                ("May", "Maj"),
+                ("Jun", "Juni"),
+                ("Jul", "Juli"),
+                ("Aug", "Augusti"),
+                ("Sep", "Sept", "September"),
+                ("Okt", "Oktober"),
+                ("Nov", "November"),
+                ("Dec", "December")]
 
 
 def shellquote(s):
@@ -33,6 +56,23 @@ def numerics(s):
         else:
             n = n * 10 + int(c)
     return n
+
+
+def swe_to_eng_date(s):
+    rep = [
+        ('maj', 'may'),
+        ('okt', 'oct'),
+        ('tor', 'thu'),
+        ('fre', 'fri'),
+        ('ons', 'wed'),
+        ('tis', 'tue'),
+        ('mån', 'mon')
+    ]
+    for a in rep:
+
+        s = s.replace(a[0], a[1])
+
+    return s
 
 
 def parse_date(datum, typ):
@@ -115,6 +155,27 @@ class Episodes:
         episode = article.find('a.playLink')
         full_url = self.crawler.baseurl + article.find('a.playLink').attr('href')
         broadcasted = article.find('time').attr('datetime')
+        episode_date = parse(broadcasted).replace(tzinfo=None)
+        published = article.attr('data-published')
+
+        if published.find('idag') != -1:
+            published = '%s' % datetime.today()
+
+        try:
+            published_date = parse(published, parserinfo=sverje()).replace(tzinfo=None)
+        except ValueError as err:
+            print err
+            print published
+
+        if self.crawler.min is not None:
+            if published_date < self.crawler.min:
+                self.i += 1
+                return self.next()
+
+        if self.crawler.max is not None:
+            if published_date > self.crawler.max:
+                self.i += 1
+                return self.next()
 
         if len(broadcasted) < 1:
             broadcasted = '1970-01-01 00:00:00'
@@ -156,6 +217,8 @@ class Episodes:
 
                     episodeTitle = article_full.find('title').eq(0).text().replace('| SVT Play', '')
                     episode.title = episodeTitle
+                    episode.published = published
+                    episode.published_date = published_date
                     episode.title_slug = shellquote(episodeTitle)
                     episode.http_status = 200
                     episode.http_status_checked_date = datetime.utcnow().replace(tzinfo=utc)
@@ -247,11 +310,13 @@ class Categories:
 
 
 class SvtCrawler:
-    def __init__(self):
+    def __init__(self, max_timestamp, min_timestamp):
         self.timezone = 'Europe/Stockholm'
         self.baseurl = 'http://www.svtplay.se'
         self.url = 'http://www.svtplay.se/program'
         self.category_url = 'http://www.svtplay.se%s/?tab=titles&sida=1000'
+        self.max = max_timestamp
+        self.min = min_timestamp
 
         self.categories = Categories(self)
 

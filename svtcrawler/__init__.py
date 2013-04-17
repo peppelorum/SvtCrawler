@@ -201,8 +201,9 @@ class Episodes:
                     episode = Episode()
 
                     desc = article_full.find('.playVideoInfo p').text()
-                    if len(desc) == 0:
-                        desc = article_full.find('.playVideoInfo span')
+                    if desc is not None:
+                        if len(desc) == 0:
+                            desc = article_full.find('.playVideoInfo span')
                     desc = sanitize_description(unicode(desc))
 
                     if str(meta).find('Kan endast ses i Sverige') == -1:
@@ -216,6 +217,7 @@ class Episodes:
                         on_device = 2
 
                     episodeTitle = article_full.find('title').eq(0).text().replace('| SVT Play', '')
+                    episode.url = url
                     episode.title = episodeTitle
                     episode.published = published
                     episode.published_date = published_date

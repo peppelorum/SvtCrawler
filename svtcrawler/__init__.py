@@ -180,11 +180,14 @@ class Episodes:
         if len(broadcasted) < 1:
             broadcasted = '1970-01-01 00:00:00'
 
+        # Todo: TEMPORARY DISABLED FOR NOW! DUE TO MISS SYNC WITH THE WP8 APP.
         #Check if the url contains an extra /Random-Title, if so, remove it
-        if len(full_url.split('/')) == 6:
-            url = full_url.rpartition('/')[0]
-        else:
-            url = full_url
+        # if len(full_url.split('/')) == 6:
+        #     url = full_url.rpartition('/')[0]
+        # else:
+        #     url = full_url
+        #
+        url = full_url
 
         if (url.find('video') != -1 or url.find('klipp') != -1) and len(broadcasted) > 1:
 

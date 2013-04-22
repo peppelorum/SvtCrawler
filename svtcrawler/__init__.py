@@ -161,6 +161,9 @@ class Episodes:
         if published.find('idag') != -1:
             published = '%s' % datetime.today()
 
+        if published.find('igår') != -1:
+            published = '%s' % (datetime.today() - timedelta(days=1))
+
         try:
             published_date = parse(published, parserinfo=sverje()).replace(tzinfo=None)
         except ValueError as err:

@@ -158,6 +158,10 @@ class Episodes:
         episode_date = parse(broadcasted).replace(tzinfo=None)
         published = article.attr('data-published')
 
+        if full_url in self.crawler.skip_urls:
+            self.i += 1
+            return self.next()
+
         if published.find('idag') != -1:
             published = '%s' % datetime.today()
 
@@ -318,13 +322,17 @@ class Categories:
 
 
 class SvtCrawler:
-    def __init__(self, max_timestamp, min_timestamp):
+    def __init__(self, max_timestamp, min_timestamp, skip_urls):
         self.timezone = 'Europe/Stockholm'
         self.baseurl = 'http://www.svtplay.se'
         self.url = 'http://www.svtplay.se/program'
         self.category_url = 'http://www.svtplay.se%s/?tab=titles&sida=1000'
         self.max = max_timestamp
         self.min = min_timestamp
+        if type(skip_urls) == 'str':
+            self.skip_urls = skip_urls.split(',')
+        else:
+            self.skip_urls = skip_urls
 
         self.categories = Categories(self)
 

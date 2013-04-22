@@ -161,7 +161,7 @@ class Episodes:
         if published.find('idag') != -1:
             published = '%s' % datetime.today()
 
-        if published.find('igår') != -1:
+        if published.find(u'igår') != -1:
             published = '%s' % (datetime.today() - timedelta(days=1))
 
         try:

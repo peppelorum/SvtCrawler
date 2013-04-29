@@ -158,11 +158,15 @@ class Episodes:
         episode_date = parse(broadcasted).replace(tzinfo=None)
         published = article.attr('data-published')
 
-        if full_url in self.crawler.skip_urls:
-            self.i += 1
-            return self.next()
+        if self.crawler.skip_urls:
+            if full_url in self.crawler.skip_urls:
+                self.i += 1
+                return self.next()
 
         if published.find('idag') != -1:
+            published = '%s' % datetime.today()
+
+        if published.find(u'ikväll') != -1:
             published = '%s' % datetime.today()
 
         if published.find(u'igår') != -1:

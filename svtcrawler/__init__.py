@@ -167,7 +167,8 @@ class Episodes:
             published = '%s' % datetime.today()
 
         if published.find(u'ikväll') != -1:
-            published = '%s' % datetime.today()
+            self.i += 1
+            return self.next()
 
         if published.find(u'igår') != -1:
             published = '%s' % (datetime.today() - timedelta(days=1))

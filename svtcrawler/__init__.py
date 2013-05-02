@@ -8,6 +8,7 @@
 # ----------------------------------------------------------------------------
 #
 
+import itertools
 from datetime import datetime, timedelta
 from urllib2 import HTTPError
 from pytz import timezone, utc
@@ -320,7 +321,17 @@ class Categories:
         url = self.crawler.category_url % href
 
         category = Category(title, url, html_class, thumbnail_url)
-        category.shows = Shows(self.crawler, url)
+        shows = Shows(self.crawler, url)
+
+        tmp = list()
+        tmp.append(shows)
+
+        if title == 'Nyheter':
+            news_url = self.crawler.news_url % href
+            news_shows = Shows(self.crawler, news_url)
+            tmp.append(news_shows)
+
+        category.shows = itertools.chain(*tmp)
 
         self.i += 1
         return category
@@ -332,6 +343,7 @@ class SvtCrawler:
         self.baseurl = 'http://www.svtplay.se'
         self.url = 'http://www.svtplay.se/program'
         self.category_url = 'http://www.svtplay.se%s/?tab=titles&sida=1000'
+        self.news_url = 'http://www.svtplay.se%s/?tab=regionalNews&sida=1000'
         self.max = max_timestamp
         self.min = min_timestamp
         if type(skip_urls) == 'str':

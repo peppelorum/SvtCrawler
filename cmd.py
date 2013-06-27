@@ -26,6 +26,9 @@ def main():
     parser.add_option("--min", dest="min_timestamp",
                       help="only aggregate items newer than MIN_TIMESTAMP",
                       metavar="MAX_TIMESTAMP(YYYY-MM-DD)")
+    parser.add_option("--urls", dest="skip_urls",
+                      help="Skip these urls",
+                      metavar="MAX_TIMESTAMP(YYYY-MM-DD)")
     options,args = parser.parse_args()
     if options.max_timestamp:
         # Try parsing the date argument
@@ -43,26 +46,34 @@ def main():
             print "Error parsing date input:", sys.exc_info()
             sys.exit(1)
 
+    print options
+
     print '*********'
     print 'CRAWLING!'
     print '*********'
 
-    obj = SvtCrawler(max_timestamp=max_timestamp, min_timestamp=min_timestamp)
+    longesturl = ''
+
+    obj = SvtCrawler(max_timestamp=max_timestamp, min_timestamp=min_timestamp, skip_urls=options.skip_urls)
 
     for a in obj.categories:
 
-        print a.title
-        for b in a.shows:
+        if unicode(a.title) == u'Nyheter':
 
-            print '\t', b.title, b.url
+            print a.title
+            for b in a.shows:
 
-            print '\tEpisoder:'
-            for c in b.episodes:
-                print '\t\t', c.title, c.published_date
-
-            print '\tKlipp:'
-            for c in b.clips:
-                print '\t\t', c.title, c.published_date
+                # # if unicode(b.title) == u'Mästarnas mästare':
+                #
+                print '\t', b.title, b.url
+                #
+                print '\tEpisoder:'
+                for c in b.episodes:
+                    print '\t\t', c.title, c.published_date
+                # #
+                print '\tKlipp:'
+                for c in b.clips:
+                    print '\t\t', c.title, c.published_date
 
 if __name__ == '__main__':
     main()

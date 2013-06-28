@@ -209,7 +209,7 @@ class Episodes:
                     # Get the episode from url
                     article_full = PyQuery(url)
                     thumbnail = article_full.find('img.svtHide-No-Js').eq(0).attr('data-imagename')
-                    meta = article_full.find('.playVideoMetaInfo div')
+                    meta = article_full.find('.playBoxConnectedToVideoMain div')
 
                     episode = Episode()
 

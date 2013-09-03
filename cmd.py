@@ -58,22 +58,22 @@ def main():
 
     for a in obj.categories:
 
-        if unicode(a.title) == u'Nyheter':
+        # if unicode(a.title) == u'Barn':
 
-            print a.title
-            for b in a.shows:
+        print a.title.encode('utf-8')
+        for b in a.shows:
 
-                # # if unicode(b.title) == u'Mästarnas mästare':
-                #
-                print '\t', b.title, b.url
-                #
-                print '\tEpisoder:'
-                for c in b.episodes:
-                    print '\t\t', c.title, c.published_date
-                # #
-                print '\tKlipp:'
-                for c in b.clips:
-                    print '\t\t', c.title, c.published_date
+            # if unicode(b.title) == u'Dinosaurietåget':
+
+            print '\t', b.title.encode('utf-8')
+            #
+            print '\tEpisoder:'
+            for c in b.episodes:
+                print '\t\t', c.title.encode('utf-8')
+            # #
+            print '\tKlipp:'
+            for c in b.clips:
+                print '\t\t', c.title.encode('utf-8')
 
 if __name__ == '__main__':
     main()

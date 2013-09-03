@@ -134,9 +134,9 @@ class Episodes:
 
         self.episodes = PyQuery(url)
         if kind_of == 'episodes':
-            self.episodes_iter = self.episodes.find('.svtTab-1.playBoxBody').find('article.svtUnit')
+            self.episodes_iter = self.episodes.find('#programpanel').find('article.svtUnit')
         else:
-            self.episodes_iter = self.episodes.find('.svtTab-2.playBoxBody').find('article.svtUnit')
+            self.episodes_iter = self.episodes.find('#klipppanel').find('article.svtUnit')
 
     def __iter__(self):
         return self
@@ -260,7 +260,7 @@ class Shows:
         self.i = 0
 
         self.shows = PyQuery(url)
-        self.shows_iter = self.shows.find('.playBoxBody.svtTab-1 article.svtUnit')
+        self.shows_iter = self.shows.find('.playBoxBody article.svtUnit')
 
     def __iter__(self):
         return self

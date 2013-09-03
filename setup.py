@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='SVTCrawler',
-    version='0.1.3',
+    version='0.1.4',
     author='Peppe Bergqvist',
     author_email='p@bergqvi.st',
     packages=['svtcrawler',],

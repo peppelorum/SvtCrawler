@@ -229,22 +229,26 @@ class Episodes:
                     else:
                         on_device = 2
 
-                    episodeTitle = article_full.find('title').eq(0).text().replace('| SVT Play', '')
-                    episode.url = url
-                    episode.title = episodeTitle
-                    episode.published = published
-                    episode.published_date = published_date
-                    episode.title_slug = shellquote(episodeTitle)
-                    episode.http_status = 200
-                    episode.http_status_checked_date = datetime.utcnow().replace(tzinfo=utc)
-                    episode.date_available_until = available
-                    episode.date_broadcasted = broadcasted
-                    episode.length = length
-                    episode.description = desc
-                    episode.viewable_on_device = on_device
-                    episode.viewable_in = rights
-                    episode.kind_of = self.kind_of
-                    episode.thumbnail_url = thumbnail
+                    try:
+                        episodeTitle = article_full.find('title').eq(0).text().replace('| SVT Play', '')
+                        episode.url = url
+                        episode.title = episodeTitle
+                        episode.published = published
+                        episode.published_date = published_date
+                        episode.title_slug = shellquote(episodeTitle)
+                        episode.http_status = 200
+                        episode.http_status_checked_date = datetime.utcnow().replace(tzinfo=utc)
+                        episode.date_available_until = available
+                        episode.date_broadcasted = broadcasted
+                        episode.length = length
+                        episode.description = desc
+                        episode.viewable_on_device = on_device
+                        episode.viewable_in = rights
+                        episode.kind_of = self.kind_of
+                        episode.thumbnail_url = thumbnail
+                    except AttributeError:
+                        self.i += 1
+                        return self.next()
 
                     self.i += 1
                     return episode

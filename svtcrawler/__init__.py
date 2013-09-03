@@ -284,8 +284,8 @@ class Shows:
 
             show = Show(title=show_title, url=show_url, thumbnail=thumbnail_url)
 
-            episodes_url = show_url + '?tab=episodes&sida=1000'
-            clip_url = show_url + '?tab=clips&sida=1000'
+            episodes_url = show_url + '?tab=program&sida=1000'
+            clip_url = show_url + '?tab=klipp&sida=1000'
 
             show.episodes = Episodes(self.crawler, episodes_url, 'episodes')
             show.clips = Episodes(self.crawler, clip_url, 'clips')

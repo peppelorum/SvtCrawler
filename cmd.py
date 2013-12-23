@@ -58,22 +58,26 @@ def main():
 
     for a in obj.categories:
 
-        # if unicode(a.title) == u'Barn':
+        #print a.title.encode('utf-8')
+
+        #if unicode(a.title) == u'Kultur & Nöje':
 
         print a.title.encode('utf-8')
         for b in a.shows:
 
-            # if unicode(b.title) == u'Dinosaurietåget':
+            #if unicode(b.title) == u'Yakari':
 
             print '\t', b.title.encode('utf-8')
-            #
+
             print '\tEpisoder:'
             for c in b.episodes:
                 print '\t\t', c.title.encode('utf-8')
-            # #
+                #print c.description
+
             print '\tKlipp:'
             for c in b.clips:
                 print '\t\t', c.title.encode('utf-8')
+                #print c.description
 
 if __name__ == '__main__':
     main()

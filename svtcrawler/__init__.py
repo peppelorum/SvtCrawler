@@ -291,8 +291,22 @@ class Shows:
             episodes_url = show_url + '?tab=program&sida=1000'
             clip_url = show_url + '?tab=klipp&sida=1000'
 
-            show.episodes = Episodes(self.crawler, episodes_url, 'episodes')
-            show.clips = Episodes(self.crawler, clip_url, 'clips')
+            try:
+                show.episodes = Episodes(self.crawler, episodes_url, 'episodes')
+            except HTTPError as e:
+                print e
+                print episodes_url
+
+                show.episodes = []
+
+            try:
+                show.clips = Episodes(self.crawler, clip_url, 'clips')
+            except HTTPError as e:
+                print e
+                print episodes_url
+
+                show.clips = []
+
 
             self.i += 1
             return show
@@ -343,7 +357,7 @@ class SvtCrawler:
         self.timezone = 'Europe/Stockholm'
         self.baseurl = 'http://www.svtplay.se'
         self.url = 'http://www.svtplay.se/program'
-        self.category_url = 'http://www.svtplay.se%s/?tab=titles&sida=1000'
+        self.category_url = 'http://www.svtplay.se%s/?tab=titlar&sida=1000'
         self.news_url = 'http://www.svtplay.se%s/?tab=regionalNews&sida=1000'
         self.max = max_timestamp
         self.min = min_timestamp
